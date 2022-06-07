@@ -1,16 +1,24 @@
 function getRandomIntegerNumberFromRange (min, max) {
-  if (min >= max || min < 0 || max < 0) {
+  const isRangeCorrect = min > max || min < 0 || max < 0;
+  if (isRangeCorrect) {
     throw 'Некорректно задан диапазон';
   }
-  return Math.floor(Math.random() * (max - min) + 1) + min;
+  if (min === max) {
+    return min;
+  }
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
-getRandomIntegerNumberFromRange(5, 10);
+getRandomIntegerNumberFromRange(1, 10);
 
 function getRandomNotIntegerNumberFromRange (min, max, simbolsNumberAfterComma) {
-  if (min >= max || min < 0 || max < 0) {
+  const isRangeCorrect = min > max || min < 0 || max < 0;
+  if (isRangeCorrect) {
     throw 'Некорректно задан диапазон';
   }
-  return ((Math.random() * (max - min)) + min).toFixed(simbolsNumberAfterComma);
+  if (min === max) {
+    return min;
+  }
+  return +(((Math.random() * (max - min)) + min).toFixed(simbolsNumberAfterComma));
 }
 getRandomNotIntegerNumberFromRange(1.1, 1.2, 7);
