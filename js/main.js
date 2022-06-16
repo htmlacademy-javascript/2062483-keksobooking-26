@@ -65,7 +65,7 @@ function getRandomIntegerNumberFromRange (min, max) {
   if (min === max) {
     return min;
   }
-  return Math.floor(Math.random() * (max - min)) + min;
+  return Math.round(Math.random() * (max - min)) + min;
 }
 function getRandomNotIntegerNumberFromRange (min, max, simbolsNumberAfterComma) {
   const isRangeCorrect = min > max || min < 0 || max < 0;
