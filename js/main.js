@@ -1,22 +1,22 @@
 const COUNT_OF_AD = 10;
-const COORDINATES_OF_OFFER = {
-  maxLat : 35.70000,
-  minLat : 35.65000,
-  maxLng : 139.80000,
-  minLng : 139.70000,
-  numberOfDigitsAfterComma : 5
+const coordinatesOfOffer = {
+  MAXLAT : 35.70000,
+  MINLAT : 35.65000,
+  MAXLNG : 139.80000,
+  MINLNG : 139.70000,
+  NUMBER_OF_DIGITS_AFTER_COMMA : 5
 };
-const PRICE_OF_OFFER = {
-  minPrice : 1000,
-  maxPrice : 10000
+const priceOfOffer = {
+  MIN_PRICE : 1000,
+  MAX_PRICE : 10000
 };
-const ROOMS_OF_OFFER = {
-  minCountOfRooms : 1,
-  maxCountOfRooms : 3
+const roomsOfOffer = {
+  MIN_COUNT_OF_ROOMS : 1,
+  MAX_COUNT_OF_ROOMS : 3
 };
-const GUESTS_OF_OFFER =  {
-  minCountOfGuests : 1,
-  maxCountOfGuests : 6
+const guestsOfOffer =  {
+  MIN_COUNT_OF_GUESTS : 1,
+  MAX_COUNT_OF_GUESTS: 6
 };
 const TITLE_OF_OFFER = [
   'My flat for you',
@@ -77,42 +77,22 @@ function getRandomNotIntegerNumberFromRange (min, max, simbolsNumberAfterComma) 
   }
   return +(((Math.random() * (max - min)) + min).toFixed(simbolsNumberAfterComma));
 }
-
 const getRandomArrayElement = (elements) => elements[getRandomIntegerNumberFromRange(0, elements.length - 1)];
-
 const getAvatars = (count) => {
-  const avatars = [...Array(count)];
-  avatars.fill('').forEach((item, i) => {
-    avatars[i] = `img/avatars/user${String(i+1).padStart(2, '0')}.png`;
-  });
+  const avatars = new Array(count).fill('').map((item, i) => `img/avatars/user${String(i+1).padStart(2, '0')}.png`);
   return avatars;
 };
 const AVATARS_OF_AUTHOR = getAvatars(COUNT_OF_AD);
 
-const getFeatures = (features) => {
-  const setOfFeaturesLength = getRandomIntegerNumberFromRange(1, features.length);
-  const setOfFeatures = [...Array(setOfFeaturesLength)];
-  const unicumFeatures = [...features];
-  setOfFeatures.filter((item, i) => {
-    const randomIndexUnicumFeatures = getRandomIntegerNumberFromRange(0, unicumFeatures.length - 1);
-    setOfFeatures[i] = unicumFeatures[randomIndexUnicumFeatures];
-    unicumFeatures.splice(randomIndexUnicumFeatures, 1);
-  });
-  return setOfFeatures;
-};
-
-const getPhotos = (photos) => {
-  const setOfPhotosLength = getRandomIntegerNumberFromRange(1, photos.length);
-  const setOfPhotos = [...Array(setOfPhotosLength)];
-  setOfPhotos.filter((item, i) => {
-    setOfPhotos[i] = photos[getRandomIntegerNumberFromRange(0, photos.length - 1)];
-  });
-  return setOfPhotos;
+const getNewSetOfValues = (values) => {
+  const setOfValues = [...values];
+  setOfValues.sort(() => Math.random() - 0.5);
+  return setOfValues.slice(0, getRandomIntegerNumberFromRange(1, values.length));
 };
 
 const createAds = (number) => {
-  const latOfOffer = getRandomNotIntegerNumberFromRange(COORDINATES_OF_OFFER.minLat, COORDINATES_OF_OFFER.maxLat, COORDINATES_OF_OFFER.numberOfDigitsAfterComma);
-  const lngOfOffer = getRandomNotIntegerNumberFromRange(COORDINATES_OF_OFFER.minLng, COORDINATES_OF_OFFER.maxLng, COORDINATES_OF_OFFER.numberOfDigitsAfterComma);
+  const latOfOffer = getRandomNotIntegerNumberFromRange(coordinatesOfOffer.MINLAT, coordinatesOfOffer.MAXLAT, coordinatesOfOffer.NUMBER_OF_DIGITS_AFTER_COMMA);
+  const lngOfOffer = getRandomNotIntegerNumberFromRange(coordinatesOfOffer.MINLNG, coordinatesOfOffer.MAXLNG, coordinatesOfOffer.NUMBER_OF_DIGITS_AFTER_COMMA);
   return {
     author : {
       avatar : AVATARS_OF_AUTHOR[number],
@@ -120,15 +100,15 @@ const createAds = (number) => {
     offer : {
       title : getRandomArrayElement(TITLE_OF_OFFER),
       address : `${latOfOffer}, ${lngOfOffer}`,
-      price : getRandomIntegerNumberFromRange(PRICE_OF_OFFER.minPrice, PRICE_OF_OFFER.maxPrice),
+      price : getRandomIntegerNumberFromRange(priceOfOffer.MIN_PRICE, priceOfOffer.MAX_PRICE),
       type : getRandomArrayElement(TYPE_OF_OFFER),
-      rooms : getRandomIntegerNumberFromRange(ROOMS_OF_OFFER.minCountOfRooms, ROOMS_OF_OFFER.maxCountOfRooms),
-      guests : getRandomIntegerNumberFromRange(GUESTS_OF_OFFER.minCountOfGuests, GUESTS_OF_OFFER.maxCountOfGuests),
+      rooms : getRandomIntegerNumberFromRange(roomsOfOffer.MIN_COUNT_OF_ROOMS, roomsOfOffer.MAX_COUNT_OF_ROOMS),
+      guests : getRandomIntegerNumberFromRange(guestsOfOffer.MIN_COUNT_OF_GUESTS, guestsOfOffer.MAX_COUNT_OF_GUESTS),
       checkin : getRandomArrayElement(CHECIN_OF_OFFER),
       checkout : getRandomArrayElement(CHECKOUT_OF_OFFER),
-      features : getFeatures(FEATURES_OF_OFFER),
+      features : getNewSetOfValues(FEATURES_OF_OFFER),
       description : getRandomArrayElement(DESCRIPTION_OF_OFFER),
-      photos : getPhotos(PHOTOS_OF_OFFER)
+      photos : getNewSetOfValues(PHOTOS_OF_OFFER)
     },
     location : {
       lat : latOfOffer,
@@ -138,10 +118,7 @@ const createAds = (number) => {
 };
 
 const CreateArraySimilarAdsNearby = (count) => {
-  const similarAds = [...Array(count)];
-  similarAds.fill('').forEach((item, i) => {
-    similarAds[i] = createAds(i);
-  });
+  const similarAds = new Array(count).fill('').map((item, i) => createAds(i));
   return similarAds;
 };
 
