@@ -23,7 +23,7 @@ const PriceOfOffer = {
 };
 const RoomsOfOffer = {
   MIN_COUNT_OF_ROOMS : 1,
-  MAX_COUNT_OF_ROOMS : 3
+  MAX_COUNT_OF_ROOMS : 10
 };
 const GuestsOfOffer =  {
   MIN_COUNT_OF_GUESTS : 1,
