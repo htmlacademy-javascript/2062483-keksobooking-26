@@ -10,14 +10,16 @@ const housingType = {
   hotel : 'Отель'
 };
 
+const declinationRoomStrings = ['комната', 'комнаты', 'комнат'];
+const declinationGuestStrings = ['гостя', 'гостей'];
+
 const mapCanvas = document.querySelector('#map-canvas');
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createOfferCard = (ad) => {
   const similarOffer = popupTemplate.cloneNode(true);
 
-  const {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos} = ad.offer;
-  const {avatar} = ad.author;
+  const {offer: {title, address, price, type, rooms, guests, checkin, checkout, features, description, photos}, author: {avatar}} = ad;
 
   const featureTemplate = similarOffer.querySelector('.popup__features');
   const createFeaturesList = (listOfFeatures) => {
@@ -59,7 +61,7 @@ const createOfferCard = (ad) => {
   similarOffer.querySelector('.popup__text--address').textContent = address;
   similarOffer.querySelector('.popup__text--price').textContent = `${price} ₽/ночь`;
   similarOffer.querySelector('.popup__type').textContent = housingType[type];
-  similarOffer.querySelector('.popup__text--capacity').textContent = `${rooms} ${declinationString(rooms, ['комната', 'комнаты', 'комнат'])} для ${guests} ${declinationString(guests, ['гостя', 'гостей'])}.`;
+  similarOffer.querySelector('.popup__text--capacity').textContent = `${rooms} ${declinationString(rooms, declinationRoomStrings)} для ${guests} ${declinationString(guests, declinationGuestStrings)}.`;
   similarOffer.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
   similarOffer.querySelector('.popup__avatar').src = avatar;
 
