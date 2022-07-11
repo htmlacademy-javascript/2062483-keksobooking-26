@@ -3,7 +3,8 @@ import {
   MIN_TITLE_LENGTH,
   MAX_PRICE_VALUE,
   RoomsCount,
-  GuestsCount
+  GuestsCount,
+  MinPriceDependingHousingType
 } from './constants.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -11,6 +12,9 @@ const titleInput = adForm.querySelector('#title');
 const priceInput = adForm.querySelector('#price');
 const guestsInput = adForm.querySelector('#capacity');
 const roomsInput = adForm.querySelector('#room_number');
+const housingTypeInput = adForm.querySelector('#type');
+const timeinInput = adForm.querySelector('#timein');
+const timeoutInput = adForm.querySelector('#timeout');
 
 const availableCountRoomsAndGuests = {
   [RoomsCount.ONE_ROOM] : [GuestsCount.ONE_GUEST],
@@ -18,6 +22,27 @@ const availableCountRoomsAndGuests = {
   [RoomsCount.THREE_ROOMS] : [GuestsCount.ONE_GUEST, GuestsCount.TWO_GUESTS, GuestsCount.THREE_GUESTS],
   [RoomsCount.HUNDRED_ROOMS] : [GuestsCount.UNAVAILABLE]
 };
+
+const changePriceDependingHousingType = (housingType) => {
+  switch(housingType) {
+    case 'bungalow' :
+      priceInput.placeholder = MinPriceDependingHousingType.bungalow;
+      break;
+    case 'flat' :
+      priceInput.placeholder = MinPriceDependingHousingType.flat;
+      break;
+    case 'hotel' :
+      priceInput.placeholder = MinPriceDependingHousingType.hotel;
+      break;
+    case 'house' :
+      priceInput.placeholder = MinPriceDependingHousingType.house;
+      break;
+    case 'palace' :
+      priceInput.placeholder = MinPriceDependingHousingType.palace;
+      break;
+  }
+};
+changePriceDependingHousingType(housingTypeInput.value);
 
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
@@ -28,17 +53,13 @@ const pristine = new Pristine(adForm, {
 
 const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 
-const validatePrice = (value) => value <= MAX_PRICE_VALUE;
+const validatePrice = (value) => value >= MinPriceDependingHousingType[housingTypeInput.value] && value <= MAX_PRICE_VALUE;
+
+const getPriceErrorMessage = () => priceInput.value >= MAX_PRICE_VALUE ? 'Слишком дорого' : 'Слишком дешево';
 
 const validateRooms = () => availableCountRoomsAndGuests[roomsInput.value].includes(guestsInput.value);
 
-const getGuestsErrorMessage = () =>  {
-  if (roomsInput.value === RoomsCount.HUNDRED_ROOMS) {
-    return 'Не для гостей';
-  } else {
-    return 'Не достаточно места для размещения';
-  }
-};
+const getGuestsErrorMessage = () => roomsInput.value === RoomsCount.HUNDRED_ROOMS ? 'Не для гостей' : 'Не достаточно места для размещения';
 
 const initValidationAdForm = () => {
   pristine.addValidator(
@@ -49,7 +70,7 @@ const initValidationAdForm = () => {
   pristine.addValidator(
     priceInput,
     validatePrice,
-    'Слишком дорого'
+    getPriceErrorMessage
   );
   pristine.addValidator(
     guestsInput,
@@ -61,6 +82,22 @@ const initValidationAdForm = () => {
 roomsInput.addEventListener('change', (evt) => {
   evt.preventDefault();
   pristine.validate(guestsInput);
+});
+
+housingTypeInput.addEventListener('change', (evt) =>{
+  evt.preventDefault();
+  changePriceDependingHousingType(housingTypeInput.value);
+  pristine.validate(priceInput);
+});
+
+timeinInput.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  timeoutInput.value = timeinInput.value;
+});
+
+timeoutInput.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  timeinInput.value = timeoutInput.value;
 });
 
 adForm.addEventListener('submit', (evt) => {
