@@ -1010,3 +1010,14 @@ fieldset {
 .hidden {
   display: none;
 }
+
+/**
+ * Сообщения ошибок при валидации формы объявления
+ */
+
+ .ad-form__error-text {
+  font-size: 90%;
+  font-weight: lighter;
+  color: #ff5635;
+  margin-top: 3px;
+ }

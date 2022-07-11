@@ -13,10 +13,10 @@ const guestsInput = adForm.querySelector('#capacity');
 const roomsInput = adForm.querySelector('#room_number');
 
 const availableCountRoomsAndGuests = {
-  [RoomsCount.ONE_ROOM] : GuestsCount.ONE_GUEST,
+  [RoomsCount.ONE_ROOM] : [GuestsCount.ONE_GUEST],
   [RoomsCount.TWO_ROOMS] : [GuestsCount.ONE_GUEST, GuestsCount.TWO_GUESTS],
   [RoomsCount.THREE_ROOMS] : [GuestsCount.ONE_GUEST, GuestsCount.TWO_GUESTS, GuestsCount.THREE_GUESTS],
-  [RoomsCount.HUNDRED_ROOMS] : GuestsCount.UNAVAILABLE
+  [RoomsCount.HUNDRED_ROOMS] : [GuestsCount.UNAVAILABLE]
 };
 
 const pristine = new Pristine(adForm, {
@@ -30,19 +30,17 @@ const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.lengt
 
 const validatePrice = (value) => value <= MAX_PRICE_VALUE;
 
-const validateRooms = () => (
-  availableCountRoomsAndGuests[roomsInput.value].includes(guestsInput.value)
-);
+const validateRooms = () => availableCountRoomsAndGuests[roomsInput.value].includes(guestsInput.value);
 
 const getGuestsErrorMessage = () =>  {
   if (roomsInput.value === RoomsCount.HUNDRED_ROOMS) {
-    return 'Не для достей';
+    return 'Не для гостей';
   } else {
     return 'Не достаточно места для размещения';
   }
 };
 
-const getValidationAdForm = () => {
+const initValidationAdForm = () => {
   pristine.addValidator(
     titleInput,
     validateTitle,
@@ -60,10 +58,15 @@ const getValidationAdForm = () => {
   );
 };
 
+roomsInput.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  pristine.validate(guestsInput);
+});
+
 adForm.addEventListener('submit', (evt) => {
   if (!pristine.validate()) {
     evt.preventDefault();
   }
 });
 
-export {getValidationAdForm};
+export {initValidationAdForm};
