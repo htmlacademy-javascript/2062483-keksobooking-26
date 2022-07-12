@@ -56,7 +56,8 @@ const initValidationAdForm = () => {
     priceInput,
     validatePrice,
     getPriceErrorMessage,
-    2
+    2,
+    true
   );
   pristine.addValidator(
     guestsInput,
