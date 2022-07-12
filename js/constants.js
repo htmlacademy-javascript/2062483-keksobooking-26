@@ -29,7 +29,7 @@ const GuestsCount = {
   THREE_GUESTS: '3',
   UNAVAILABLE: '0'
 };
-const MinPriceDependingHousingType = {
+const minPriceDependingHousingType = {
   bungalow : 0,
   flat : 1000,
   hotel : 3000,
@@ -46,5 +46,5 @@ export {
   MAX_PRICE_VALUE,
   RoomsCount,
   GuestsCount,
-  MinPriceDependingHousingType
+  minPriceDependingHousingType
 };

@@ -4,7 +4,7 @@ import {
   MAX_PRICE_VALUE,
   RoomsCount,
   GuestsCount,
-  MinPriceDependingHousingType
+  minPriceDependingHousingType
 } from './constants.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -24,23 +24,8 @@ const availableCountRoomsAndGuests = {
 };
 
 const changePriceDependingHousingType = (housingType) => {
-  switch(housingType) {
-    case 'bungalow' :
-      priceInput.placeholder = MinPriceDependingHousingType.bungalow;
-      break;
-    case 'flat' :
-      priceInput.placeholder = MinPriceDependingHousingType.flat;
-      break;
-    case 'hotel' :
-      priceInput.placeholder = MinPriceDependingHousingType.hotel;
-      break;
-    case 'house' :
-      priceInput.placeholder = MinPriceDependingHousingType.house;
-      break;
-    case 'palace' :
-      priceInput.placeholder = MinPriceDependingHousingType.palace;
-      break;
-  }
+  priceInput.placeholder = minPriceDependingHousingType[housingType];
+  priceInput.min = minPriceDependingHousingType[housingType];
 };
 changePriceDependingHousingType(housingTypeInput.value);
 
@@ -53,7 +38,7 @@ const pristine = new Pristine(adForm, {
 
 const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 
-const validatePrice = (value) => value >= MinPriceDependingHousingType[housingTypeInput.value] && value <= MAX_PRICE_VALUE;
+const validatePrice = (value) => value >= minPriceDependingHousingType[housingTypeInput.value] && value <= MAX_PRICE_VALUE;
 
 const getPriceErrorMessage = () => priceInput.value >= MAX_PRICE_VALUE ? 'Слишком дорого' : 'Слишком дешево';
 
@@ -70,7 +55,8 @@ const initValidationAdForm = () => {
   pristine.addValidator(
     priceInput,
     validatePrice,
-    getPriceErrorMessage
+    getPriceErrorMessage,
+    2
   );
   pristine.addValidator(
     guestsInput,
@@ -79,25 +65,33 @@ const initValidationAdForm = () => {
   );
 };
 
-roomsInput.addEventListener('change', (evt) => {
-  evt.preventDefault();
-  pristine.validate(guestsInput);
-});
-
-housingTypeInput.addEventListener('change', (evt) =>{
-  evt.preventDefault();
+const roomsValueChange = () => pristine.validate(guestsInput);
+const housingTypeChange = () => {
   changePriceDependingHousingType(housingTypeInput.value);
   pristine.validate(priceInput);
-});
+};
+const timeinChange = () => {
+  timeoutInput.value = timeinInput.value;
+};
+const timeoutChange = () => {
+  timeinInput.value = timeoutInput.value;
+};
 
+roomsInput.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  roomsValueChange();
+});
+housingTypeInput.addEventListener('change', (evt) =>{
+  evt.preventDefault();
+  housingTypeChange();
+});
 timeinInput.addEventListener('change', (evt) => {
   evt.preventDefault();
-  timeoutInput.value = timeinInput.value;
+  timeinChange();
 });
-
 timeoutInput.addEventListener('change', (evt) => {
   evt.preventDefault();
-  timeinInput.value = timeoutInput.value;
+  timeoutChange();
 });
 
 adForm.addEventListener('submit', (evt) => {
