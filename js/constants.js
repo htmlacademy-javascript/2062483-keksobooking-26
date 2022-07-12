@@ -29,6 +29,13 @@ const GuestsCount = {
   THREE_GUESTS: '3',
   UNAVAILABLE: '0'
 };
+const minPriceDependingHousingType = {
+  bungalow : 0,
+  flat : 1000,
+  hotel : 3000,
+  house : 5000,
+  palace : 10000
+};
 
 export {
   COUNT_OF_AD,
@@ -38,5 +45,6 @@ export {
   MIN_TITLE_LENGTH,
   MAX_PRICE_VALUE,
   RoomsCount,
-  GuestsCount
+  GuestsCount,
+  minPriceDependingHousingType
 };
