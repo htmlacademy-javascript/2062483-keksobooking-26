@@ -39,10 +39,15 @@ const declinationString = (number, words) => {
   return words[2];
 };
 
+const getCoordinatesString = ({ lat, lng }) => (
+  `${lat.toFixed(5)}, ${lng.toFixed(5)}`
+);
+
 export {
   getRandomIntegerNumberFromRange,
   getRandomNotIntegerNumberFromRange,
   getRandomArrayElement,
   getNewSetOfValues,
-  declinationString
+  declinationString,
+  getCoordinatesString
 };

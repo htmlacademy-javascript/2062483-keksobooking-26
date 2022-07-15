@@ -2,6 +2,7 @@ import {
   MAX_TITLE_LENGTH,
   MIN_TITLE_LENGTH,
   MAX_PRICE_VALUE,
+  MIN_PRICE_VALUE,
   RoomsCount,
   GuestsCount,
   minPriceDependingHousingType
@@ -13,8 +14,47 @@ const priceInput = adForm.querySelector('#price');
 const guestsInput = adForm.querySelector('#capacity');
 const roomsInput = adForm.querySelector('#room_number');
 const housingTypeInput = adForm.querySelector('#type');
-const timeinInput = adForm.querySelector('#timein');
-const timeoutInput = adForm.querySelector('#timeout');
+const timeInInput = adForm.querySelector('#timein');
+const timeOutInput = adForm.querySelector('#timeout');
+const adressInput = adForm.querySelector('#address');
+const sliderElement = adForm.querySelector('.ad-form__slider');
+
+const pristine = new Pristine(adForm, {
+  classTo: 'ad-form__element',
+  errorTextParent: 'ad-form__element',
+  errorTextTag: 'div',
+  errorTextClass: 'ad-form__error-text'
+}, true);
+
+const getAdressInputValue = (value) => {
+  adressInput.value = value;
+};
+
+const getStartPriceSlider = () => (priceInput.value === '') ? +(priceInput.placeholder) : priceInput.value;
+
+const setPriceSlider = () => {
+  noUiSlider.create(sliderElement, {
+    range : {
+      min : MIN_PRICE_VALUE,
+      max : MAX_PRICE_VALUE,
+    },
+    start : getStartPriceSlider(),
+    step : 100,
+    format: {
+      to : (value) => value.toFixed(0),
+      from : (value) => +(value)
+    },
+  });
+};
+setPriceSlider();
+
+const updatePriceSliderSetting = () => {
+  sliderElement.noUiSlider.updateOptions(
+    {
+      start : getStartPriceSlider()
+    }
+  );
+};
 
 const availableCountRoomsAndGuests = {
   [RoomsCount.ONE_ROOM] : [GuestsCount.ONE_GUEST],
@@ -28,13 +68,6 @@ const changePriceDependingHousingType = (housingType) => {
   priceInput.min = minPriceDependingHousingType[housingType];
 };
 changePriceDependingHousingType(housingTypeInput.value);
-
-const pristine = new Pristine(adForm, {
-  classTo: 'ad-form__element',
-  errorTextParent: 'ad-form__element',
-  errorTextTag: 'div',
-  errorTextClass: 'ad-form__error-text'
-}, true);
 
 const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 
@@ -66,34 +99,40 @@ const initValidationAdForm = () => {
   );
 };
 
-const roomsValueChange = () => pristine.validate(guestsInput);
-const housingTypeChange = () => {
+const roomsValueChangeHandler = (evt) => {
+  evt.preventDefault();
+  pristine.validate(guestsInput);
+};
+const housingTypeChangeHandler = (evt) => {
+  evt.preventDefault();
   changePriceDependingHousingType(housingTypeInput.value);
+  updatePriceSliderSetting();
   pristine.validate(priceInput);
 };
-const timeinChange = () => {
-  timeoutInput.value = timeinInput.value;
+const timeInChangeHandler = (evt) => {
+  evt.preventDefault();
+  timeOutInput.value = timeInInput.value;
 };
-const timeoutChange = () => {
-  timeinInput.value = timeoutInput.value;
+const timeOutChangeHandler = (evt) => {
+  evt.preventDefault();
+  timeInInput.value = timeOutInput.value;
+};
+const priceInputChangeHandler = (evt) => {
+  evt.preventDefault();
+  sliderElement.noUiSlider.set(Number(evt.target.value));
+};
+const priceSliderChangeHandler = () => {
+  priceInput.value = sliderElement.noUiSlider.get();
+  getStartPriceSlider();
+  pristine.validate(priceInput);
 };
 
-roomsInput.addEventListener('change', (evt) => {
-  evt.preventDefault();
-  roomsValueChange();
-});
-housingTypeInput.addEventListener('change', (evt) =>{
-  evt.preventDefault();
-  housingTypeChange();
-});
-timeinInput.addEventListener('change', (evt) => {
-  evt.preventDefault();
-  timeinChange();
-});
-timeoutInput.addEventListener('change', (evt) => {
-  evt.preventDefault();
-  timeoutChange();
-});
+roomsInput.addEventListener('change', roomsValueChangeHandler);
+housingTypeInput.addEventListener('change', housingTypeChangeHandler);
+timeInInput.addEventListener('change', timeInChangeHandler);
+timeOutInput.addEventListener('change', timeOutChangeHandler);
+priceInput.addEventListener('change', priceInputChangeHandler);
+sliderElement.noUiSlider.on('change', priceSliderChangeHandler);
 
 adForm.addEventListener('submit', (evt) => {
   if (!pristine.validate()) {
@@ -101,4 +140,7 @@ adForm.addEventListener('submit', (evt) => {
   }
 });
 
-export {initValidationAdForm};
+export {
+  initValidationAdForm,
+  getAdressInputValue
+};
