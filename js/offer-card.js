@@ -13,7 +13,6 @@ const housingType = {
 const declinationRoomStrings = ['комната', 'комнаты', 'комнат'];
 const declinationGuestStrings = ['гостя', 'гостей'];
 
-const mapCanvas = document.querySelector('#map-canvas');
 const popupTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createOfferCard = (ad) => {
@@ -65,7 +64,7 @@ const createOfferCard = (ad) => {
   similarOffer.querySelector('.popup__text--time').textContent = `Заезд после ${checkin}, выезд до ${checkout}`;
   similarOffer.querySelector('.popup__avatar').src = avatar;
 
-  mapCanvas.appendChild(similarOffer);
+  return similarOffer;
 };
 
 export {createOfferCard};
