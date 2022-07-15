@@ -2,7 +2,6 @@ import {
   MAX_TITLE_LENGTH,
   MIN_TITLE_LENGTH,
   MAX_PRICE_VALUE,
-  MIN_PRICE_VALUE,
   RoomsCount,
   GuestsCount,
   minPriceDependingHousingType
@@ -30,12 +29,26 @@ const getAdressInputValue = (value) => {
   adressInput.value = value;
 };
 
-const getStartPriceSlider = () => (priceInput.value === '') ? +(priceInput.placeholder) : priceInput.value;
+const changePriceDependingHousingType = (housingType) => {
+  priceInput.placeholder = minPriceDependingHousingType[housingType];
+  priceInput.min = minPriceDependingHousingType[housingType];
+};
+changePriceDependingHousingType(housingTypeInput.value);
+
+const isPriceLessThanMin = priceInput.value <= +(priceInput.min);
+
+const updatePriceInputToMin = () => {
+  if(isPriceLessThanMin) {
+    priceInput.value = +(priceInput.min);
+  }
+};
+
+const getStartPriceSlider = () => (isPriceLessThanMin) ? +(priceInput.min) : priceInput.value;
 
 const setPriceSlider = () => {
   noUiSlider.create(sliderElement, {
     range : {
-      min : MIN_PRICE_VALUE,
+      min : +(priceInput.min),
       max : MAX_PRICE_VALUE,
     },
     start : getStartPriceSlider(),
@@ -51,6 +64,10 @@ setPriceSlider();
 const updatePriceSliderSetting = () => {
   sliderElement.noUiSlider.updateOptions(
     {
+      range : {
+        min : +(priceInput.min),
+        max : MAX_PRICE_VALUE,
+      },
       start : getStartPriceSlider()
     }
   );
@@ -62,12 +79,6 @@ const availableCountRoomsAndGuests = {
   [RoomsCount.THREE_ROOMS] : [GuestsCount.ONE_GUEST, GuestsCount.TWO_GUESTS, GuestsCount.THREE_GUESTS],
   [RoomsCount.HUNDRED_ROOMS] : [GuestsCount.UNAVAILABLE]
 };
-
-const changePriceDependingHousingType = (housingType) => {
-  priceInput.placeholder = minPriceDependingHousingType[housingType];
-  priceInput.min = minPriceDependingHousingType[housingType];
-};
-changePriceDependingHousingType(housingTypeInput.value);
 
 const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.length <= MAX_TITLE_LENGTH;
 
@@ -107,6 +118,7 @@ const housingTypeChangeHandler = (evt) => {
   evt.preventDefault();
   changePriceDependingHousingType(housingTypeInput.value);
   updatePriceSliderSetting();
+  updatePriceInputToMin();
   pristine.validate(priceInput);
 };
 const timeInChangeHandler = (evt) => {
@@ -119,11 +131,10 @@ const timeOutChangeHandler = (evt) => {
 };
 const priceInputChangeHandler = (evt) => {
   evt.preventDefault();
-  sliderElement.noUiSlider.set(Number(evt.target.value));
+  sliderElement.noUiSlider.set(+(evt.target.value));
 };
 const priceSliderChangeHandler = () => {
   priceInput.value = sliderElement.noUiSlider.get();
-  getStartPriceSlider();
   pristine.validate(priceInput);
 };
 

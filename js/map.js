@@ -2,33 +2,43 @@ import {CoordinatesOfTokyo} from './constants.js';
 import {getAdressInputValue} from './validation-ad-form.js';
 import {getCoordinatesString} from './util.js';
 import {createOfferCard} from './offer-card.js';
+import {changeFormsState} from './toggle-status-page.js';
 
-const map = L.map('map-canvas')
+const MapAndMarkersSettings = {
+  layer : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  mainPin : {
+    iconUrl : './img/main-pin.svg',
+    iconSyze : [52, 52],
+    iconAnchor : [26, 52]
+  },
+  pin : {
+    iconUrl : './img/pin.svg',
+    iconSize : [40, 40],
+    iconAnchor : [20, 40],
+  }
+};
+
+const map = L.map('map-canvas');
+
+map.on('load', () => changeFormsState(true))
   .setView({
     lat : CoordinatesOfTokyo.lat,
     lng : CoordinatesOfTokyo.lng
   }, CoordinatesOfTokyo.scale);
 
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  MapAndMarkersSettings.layer,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
+    attribution : MapAndMarkersSettings.attribution,
+  }
 ).addTo(map);
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const mainPinIcon = L.icon({
-  iconUrl : './img/main-pin.svg',
-  iconSyze : [52, 52],
-  iconAnchor : [26, 52]
-});
+const mainPinIcon = L.icon(MapAndMarkersSettings.mainPin);
 
-const pinIcon = L.icon({
-  iconUrl : './img/pin.svg',
-  iconSize : [40, 40],
-  iconAnchor : [20, 40],
-});
+const pinIcon = L.icon(MapAndMarkersSettings.pin);
 
 const marker = L.marker(
   {
@@ -58,6 +68,10 @@ const setOfferMarkersOnMap = (similarOffers) => {
   });
 };
 
-marker.on('moveend', (evt) =>  getAdressInputValue(getCoordinatesString(evt.target.getLatLng())));
+const coordinatesMainPinHandler = ({target}) => {
+  getAdressInputValue(getCoordinatesString(target.getLatLng()));
+};
+
+marker.on('moveend', coordinatesMainPinHandler);
 
 export {setOfferMarkersOnMap};

@@ -15,4 +15,5 @@ const changeFormsState = (state) => {
   });
 };
 
+changeFormsState(false);
 export {changeFormsState};
