@@ -1,11 +1,14 @@
-import {createOffers} from './data.js';
-import {COUNT_OF_AD} from './constants.js';
 import {initValidationAdForm} from './validation-ad-form.js';
-import {setOfferMarkersOnMap} from './map.js';
+import {loadMap} from './map.js';
+import {
+  setResetAdForm,
+  setSubmitAdForm
+} from './send-form.js';
+
+loadMap();
 
 initValidationAdForm();
 
-const similarOffers = createOffers(COUNT_OF_AD);
+setResetAdForm();
 
-setOfferMarkersOnMap(similarOffers);
-
+setSubmitAdForm();

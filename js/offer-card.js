@@ -22,39 +22,42 @@ const createOfferCard = (ad) => {
 
   const featureTemplate = similarOffer.querySelector('.popup__features');
   const createFeaturesList = (listOfFeatures) => {
-    if (features.length === 0) {
+    if (!features) {
       featureTemplate.remove();
+    } else {
+      featureTemplate.innerHTML = '';
+      listOfFeatures.forEach((feature, i) => {
+        feature = document.createElement('li');
+        feature.classList.add('popup__feature');
+        feature.classList.add(`popup__feature--${listOfFeatures[i]}`);
+        featureTemplate.appendChild(feature);
+      });
     }
-    featureTemplate.innerHTML = '';
-    listOfFeatures.forEach((feature, i) => {
-      feature = document.createElement('li');
-      feature.classList.add('popup__feature');
-      feature.classList.add(`popup__feature--${listOfFeatures[i]}`);
-      featureTemplate.appendChild(feature);
-    });
   };
   createFeaturesList(features);
 
   const photoTemplate = similarOffer.querySelector('.popup__photos');
   const photosList = photoTemplate.querySelector('.popup__photo');
   const createPhotosList = (listOfPhotos) => {
-    if (listOfPhotos.length === 0) {
+    if (!listOfPhotos) {
       photoTemplate.remove();
+    } else {
+      listOfPhotos.forEach((photo) => {
+        const photoItem = photosList.cloneNode(true);
+        photoItem.src = photo;
+        photoTemplate.appendChild(photoItem);
+      });
+      photoTemplate.children[0].remove();
     }
-    listOfPhotos.forEach((photo) => {
-      const photoItem = photosList.cloneNode(true);
-      photoItem.src = photo;
-      photoTemplate.appendChild(photoItem);
-    });
-    photoTemplate.children[0].remove();
   };
   createPhotosList(photos);
 
   const descriptionTemplate = similarOffer.querySelector('.popup__description');
-  if (ad.offer.description.length === 0) {
+  if (!description) {
     descriptionTemplate.remove();
+  } else {
+    descriptionTemplate.textContent = description;
   }
-  descriptionTemplate.textContent = description;
 
   similarOffer.querySelector('.popup__title').textContent = title;
   similarOffer.querySelector('.popup__text--address').textContent = address;

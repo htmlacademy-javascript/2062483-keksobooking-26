@@ -145,13 +145,10 @@ timeOutInput.addEventListener('change', timeOutChangeHandler);
 priceInput.addEventListener('change', priceInputChangeHandler);
 sliderElement.noUiSlider.on('change', priceSliderChangeHandler);
 
-adForm.addEventListener('submit', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-});
-
 export {
   initValidationAdForm,
-  getAdressInputValue
+  getAdressInputValue,
+  adForm,
+  pristine,
+  sliderElement
 };
