@@ -44,6 +44,11 @@ const CoordinatesOfTokyo = {
   scale : 12
 };
 
+const Urls = {
+  GET: 'https://26.javascript.pages.academy/keksobooking/data',
+  POST: 'https://26.javascript.pages.academy/keksobooking',
+};
+
 export {
   COUNT_OF_AD,
   TYPE_OF_OFFER,
@@ -55,5 +60,6 @@ export {
   RoomsCount,
   GuestsCount,
   minPriceDependingHousingType,
-  CoordinatesOfTokyo
+  CoordinatesOfTokyo,
+  Urls
 };

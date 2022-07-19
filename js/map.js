@@ -1,18 +1,20 @@
 import {CoordinatesOfTokyo} from './constants.js';
 import {getAdressInputValue} from './validation-ad-form.js';
-import {getCoordinatesString} from './util.js';
+import {getCoordinatesString, showError} from './util.js';
 import {createOfferCard} from './offer-card.js';
 import {changeFormsState} from './toggle-status-page.js';
+import {COUNT_OF_AD} from './constants.js';
+import {makeRequest} from './api.js';
 
 const MapAndMarkersSettings = {
-  layer : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  mainPin : {
+  LAYER : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  MAIN_PIN : {
     iconUrl : './img/main-pin.svg',
     iconSyze : [52, 52],
     iconAnchor : [26, 52]
   },
-  pin : {
+  PIN : {
     iconUrl : './img/pin.svg',
     iconSize : [40, 40],
     iconAnchor : [20, 40],
@@ -21,24 +23,18 @@ const MapAndMarkersSettings = {
 
 const map = L.map('map-canvas');
 
-map.on('load', () => changeFormsState(true))
-  .setView({
-    lat : CoordinatesOfTokyo.lat,
-    lng : CoordinatesOfTokyo.lng
-  }, CoordinatesOfTokyo.scale);
-
 L.tileLayer(
-  MapAndMarkersSettings.layer,
+  MapAndMarkersSettings.LAYER,
   {
-    attribution : MapAndMarkersSettings.attribution,
+    attribution : MapAndMarkersSettings.ATTRIBUTION,
   }
 ).addTo(map);
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const mainPinIcon = L.icon(MapAndMarkersSettings.mainPin);
+const mainPinIcon = L.icon(MapAndMarkersSettings.MAIN_PIN);
 
-const pinIcon = L.icon(MapAndMarkersSettings.pin);
+const pinIcon = L.icon(MapAndMarkersSettings.PIN);
 
 const marker = L.marker(
   {
@@ -74,4 +70,30 @@ const coordinatesMainPinHandler = ({target}) => {
 
 marker.on('moveend', coordinatesMainPinHandler);
 
-export {setOfferMarkersOnMap};
+const onSuccessGetData = (data) => {
+  const offersData = data.slice();
+  setOfferMarkersOnMap(offersData.slice(0, COUNT_OF_AD));
+};
+
+const onFailGetData = () => {
+  showError();
+};
+
+const getMap = () => {
+  makeRequest(
+    (data) => onSuccessGetData(data),
+    () => onFailGetData(),
+    'GET'
+  );
+};
+
+const loadMap = () => {
+  changeFormsState(true);
+  map.on('load', getMap)
+    .setView({
+      lat : CoordinatesOfTokyo.lat,
+      lng : CoordinatesOfTokyo.lng
+    }, CoordinatesOfTokyo.scale);
+};
+
+export {loadMap};

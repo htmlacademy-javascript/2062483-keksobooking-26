@@ -1046,3 +1046,28 @@ fieldset {
    font-weight: lighter;
    margin-top: 3px;
  }
+
+ .server-error {
+  position: fixed;
+  top: 10px;
+  right: 0;
+  z-index: 1100;
+
+  width: 30%;
+  height: 10%;
+
+  padding-top: 20px;
+
+  text-align: center;
+  vertical-align: middle;
+
+  background-color: rgba(0, 0, 0, 0.8);
+ }
+
+ .message-error {
+  position: relative;
+
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 100;
+ }

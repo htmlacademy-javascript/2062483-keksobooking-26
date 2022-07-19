@@ -43,11 +43,22 @@ const getCoordinatesString = ({ lat, lng }) => (
   `${lat.toFixed(5)}, ${lng.toFixed(5)}`
 );
 
+const showError = () => {
+  const messageContainer = document.createElement('div');
+  const message = document.createElement('div');
+  message.textContent = 'Сервер временно не доступен. Объявления на карте не загрузились. Попробуйте позже';
+  messageContainer.classList.add('server-error');
+  message.classList.add('message-error');
+  document.body.append(messageContainer);
+  messageContainer.append(message);
+};
+
 export {
   getRandomIntegerNumberFromRange,
   getRandomNotIntegerNumberFromRange,
   getRandomArrayElement,
   getNewSetOfValues,
   declinationString,
-  getCoordinatesString
+  getCoordinatesString,
+  showError
 };
