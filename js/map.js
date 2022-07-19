@@ -6,6 +6,9 @@ import {changeFormsState} from './toggle-status-page.js';
 import {COUNT_OF_AD} from './constants.js';
 import {makeRequest} from './api.js';
 
+let offersData = [];
+
+
 const MapAndMarkersSettings = {
   LAYER : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -71,7 +74,7 @@ const coordinatesMainPinHandler = ({target}) => {
 marker.on('moveend', coordinatesMainPinHandler);
 
 const onSuccessGetData = (data) => {
-  const offersData = data.slice();
+  offersData = data.slice();
   setOfferMarkersOnMap(offersData.slice(0, COUNT_OF_AD));
 };
 
@@ -96,4 +99,29 @@ const loadMap = () => {
     }, CoordinatesOfTokyo.scale);
 };
 
-export {loadMap};
+const resetMainPin = () => {
+  marker.setLatLng({
+    lat: CoordinatesOfTokyo.lat,
+    lng: CoordinatesOfTokyo.lng,
+  });
+};
+
+const resetMarkerGroup = () => {
+  markerGroup.clearLayers();
+  markerGroup.closePopup();
+};
+
+const resetMap = () => {
+  map.setView({
+    lat: CoordinatesOfTokyo.lat,
+    lng: CoordinatesOfTokyo.lng,
+  }, CoordinatesOfTokyo.scale);
+  resetMainPin();
+  resetMarkerGroup();
+  setOfferMarkersOnMap(offersData.slice(0, COUNT_OF_AD));
+};
+
+export {
+  loadMap,
+  resetMap
+};

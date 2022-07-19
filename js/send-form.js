@@ -4,6 +4,7 @@ import {
   pristine
 } from './validation-ad-form.js';
 import {makeRequest} from './api.js';
+import {resetMap} from './map.js';
 
 const submitButton = adForm.querySelector('.ad-form__submit');
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -13,10 +14,6 @@ const errorTemplate = document.querySelector('#error').content.querySelector('.e
 const createMessage = (stateTemplate) => {
   const message = stateTemplate.cloneNode(true);
   return message;
-};
-
-const closeMessage = () => {
-  document.body.lastChild.remove();
 };
 
 const onMessageClick = (evt) => {
@@ -37,6 +34,12 @@ const showMessage = (state) => {
   document.addEventListener('click', onMessageClick);
 };
 
+function closeMessage () {
+  document.body.lastChild.remove();
+  document.removeEventListener('keydown', onMessageEscKeydown);
+  document.removeEventListener('click', onMessageClick);
+}
+
 const blockSubmitButton = () => {
   submitButton.setAttribute('disabled', true);
 };
@@ -48,7 +51,20 @@ const unblockSubmitButton = () => {
 const resetAdForm = () => {
   adForm.reset();
   sliderElement.noUiSlider.reset();
+  resetMap();
   pristine.reset();
+};
+
+const onSendSucces = () => {
+  unblockSubmitButton();
+  resetAdForm();
+  resetMap();
+  showMessage(createMessage(successTemplate));
+};
+
+const onSendFail = () => {
+  unblockSubmitButton();
+  showMessage(createMessage(errorTemplate));
 };
 
 const submitAdForm = (evt) => {
@@ -56,15 +72,8 @@ const submitAdForm = (evt) => {
   if (pristine.validate()) {
     blockSubmitButton();
     makeRequest(
-      () => {
-        unblockSubmitButton();
-        resetAdForm();
-        showMessage(createMessage(successTemplate));
-      },
-      () => {
-        unblockSubmitButton();
-        showMessage(createMessage(errorTemplate));
-      },
+      onSendSucces,
+      onSendFail,
       'POST',
       new FormData(evt.target)
     );
