@@ -7,6 +7,7 @@ import {makeRequest} from './api.js';
 import {resetMap} from './map.js';
 import {isPressEscape} from './util.js';
 import {mapFiltersContainer} from './map-filters.js';
+import {resetImages} from './form-files.js';
 
 const submitButton = adForm.querySelector('.ad-form__submit');
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -49,6 +50,7 @@ const resetAdForm = () => {
   adForm.reset();
   sliderElement.noUiSlider.reset();
   resetMap();
+  resetImages();
   pristine.reset();
 };
 
