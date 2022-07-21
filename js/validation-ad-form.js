@@ -110,40 +110,40 @@ const initValidationAdForm = () => {
   );
 };
 
-const roomsValueChangeHandler = (evt) => {
+const onRoomsValueChange = (evt) => {
   evt.preventDefault();
   pristine.validate(guestsInput);
 };
-const housingTypeChangeHandler = (evt) => {
+const onHousingTypeChange = (evt) => {
   evt.preventDefault();
   changePriceDependingHousingType(housingTypeInput.value);
   updatePriceSliderSetting();
   updatePriceInputToMin();
   pristine.validate(priceInput);
 };
-const timeInChangeHandler = (evt) => {
+const onTimeInChange = (evt) => {
   evt.preventDefault();
   timeOutInput.value = timeInInput.value;
 };
-const timeOutChangeHandler = (evt) => {
+const onTimeOutChange = (evt) => {
   evt.preventDefault();
   timeInInput.value = timeOutInput.value;
 };
-const priceInputChangeHandler = (evt) => {
+const onPriceInputChange = (evt) => {
   evt.preventDefault();
   sliderElement.noUiSlider.set(+(evt.target.value));
 };
-const priceSliderChangeHandler = () => {
+const onPriceSliderChange = () => {
   priceInput.value = sliderElement.noUiSlider.get();
   pristine.validate(priceInput);
 };
 
-roomsInput.addEventListener('change', roomsValueChangeHandler);
-housingTypeInput.addEventListener('change', housingTypeChangeHandler);
-timeInInput.addEventListener('change', timeInChangeHandler);
-timeOutInput.addEventListener('change', timeOutChangeHandler);
-priceInput.addEventListener('change', priceInputChangeHandler);
-sliderElement.noUiSlider.on('change', priceSliderChangeHandler);
+roomsInput.addEventListener('change', onRoomsValueChange);
+housingTypeInput.addEventListener('change', onHousingTypeChange);
+timeInInput.addEventListener('change', onTimeInChange);
+timeOutInput.addEventListener('change', onTimeOutChange);
+priceInput.addEventListener('change', onPriceInputChange);
+sliderElement.noUiSlider.on('change', onPriceSliderChange);
 
 export {
   initValidationAdForm,

@@ -51,6 +51,8 @@ const Urls = {
 
 const RERENDER_DELAY = 500;
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 export {
   COUNT_OF_AD,
   TYPE_OF_OFFER,
@@ -64,5 +66,6 @@ export {
   minPriceDependingHousingType,
   CoordinatesOfTokyo,
   Urls,
-  RERENDER_DELAY
+  RERENDER_DELAY,
+  FILE_TYPES
 };
