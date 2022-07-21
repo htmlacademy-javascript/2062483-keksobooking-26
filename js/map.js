@@ -95,7 +95,7 @@ const onSuccessGetData = (data) => {
 
   mapFiltersContainer.addEventListener('change', debounce(() => {
     resetAdsMarkers();
-    setOfferMarkersOnMap(cutOffersListToMaxCount(filterOffers(data),COUNT_OF_AD));
+    setOfferMarkersOnMap(cutOffersListToMaxCount(filterOffers(data), COUNT_OF_AD));
   }, RERENDER_DELAY));
 };
 

@@ -1,5 +1,6 @@
 import {adForm} from './validation-ad-form.js';
 import {FILE_TYPES} from './constants.js';
+import {createPhoto} from './util.js';
 
 
 const avatarInput = adForm.querySelector('#avatar');
@@ -8,38 +9,32 @@ const avatarPreview = adForm.querySelector('.ad-form-header__preview img');
 const photoInput = adForm.querySelector('#images');
 const photoPreview = adForm.querySelector('.ad-form__photo');
 
-const createPhoto = (photoUrl) => {
-  const img = document.createElement('img');
-  img.classList.add('ad-form__photo-preview');
-  img.src = photoUrl;
-  img.alt = 'Фото жилья';
-  photoPreview.append(img);
-};
-
 const isTypeValid = (file) => {
   const fileName = file.name.toLowerCase();
   return FILE_TYPES.some((it) => fileName.endsWith(it));
 };
 
-const avatarInputChangeHandler = (evt) => {
+const getImageFromInput = (imageInput) => imageInput.files[0];
+
+const onAvatarInputChange = (evt) => {
   evt.preventDefault();
-  const avatar = avatarInput.files[0];
+  const avatar = getImageFromInput(avatarInput);
   if (isTypeValid(avatar)) {
     avatarPreview.src = URL.createObjectURL(avatar);
   }
 };
 
-const photoInputChangeHandler = (evt) => {
+const onPhotoInputChange = (evt) => {
   evt.preventDefault();
-  const photo = photoInput.files[0];
+  const photo = getImageFromInput(photoInput);
   if (isTypeValid(photo)) {
     photoPreview.innerHTML = '';
-    createPhoto(URL.createObjectURL(photo));
+    createPhoto(URL.createObjectURL(photo), photoPreview);
   }
 };
 
-avatarInput.addEventListener('change', avatarInputChangeHandler);
-photoInput.addEventListener('change', photoInputChangeHandler);
+avatarInput.addEventListener('change', onAvatarInputChange);
+photoInput.addEventListener('change', onPhotoInputChange);
 
 const resetImages = () => {
   avatarPreview.src = 'img/muffin-grey.svg';

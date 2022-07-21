@@ -65,6 +65,14 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
+const createPhoto = (photoUrl, photoContainer) => {
+  const img = document.createElement('img');
+  img.classList.add('ad-form__photo-preview');
+  img.src = photoUrl;
+  img.alt = 'Фото жилья';
+  photoContainer.append(img);
+};
+
 export {
   getRandomIntegerNumberFromRange,
   getRandomNotIntegerNumberFromRange,
@@ -75,5 +83,6 @@ export {
   showError,
   isPressEscape,
   debounce,
-  cutOffersListToMaxCount
+  cutOffersListToMaxCount,
+  createPhoto
 };
