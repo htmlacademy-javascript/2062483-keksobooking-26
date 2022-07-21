@@ -34,12 +34,11 @@ const checkMapFilters = (ad) => {
   const checkRooms = () => String(rooms) === roomsFilterValue || roomsFilterValue === DEFAULT_VALUE;
   const checkGuests = () => String(guests) === guestsFilterValue || guestsFilterValue === DEFAULT_VALUE;
   const checkFeatures = () => {
-    if (featuresFilterValue.length) {
-      if (features) {
-        return featuresFilterValue.every((checkbox) => features.includes(checkbox.value));
-      }
-    } else {
-      return featuresFilterValue.length === 0;
+    if (featuresFilterValue.length === 0) {
+      return true;
+    }
+    if (features) {
+      return featuresFilterValue.every((checkbox) => features.includes(checkbox.value));
     }
   };
 
