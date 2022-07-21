@@ -43,21 +43,12 @@ const checkMapFilters = (ad) => {
     }
   };
 
-  if (checkType() && checkPrice() && checkRooms() && checkGuests() && checkFeatures()) {
-    return true;
-  }
-  return false;
+  const allChecks = [checkType, checkPrice, checkRooms, checkGuests, checkFeatures];
+
+  return allChecks.every((check) => check());
 };
 
-const filterOffers = (data) => {
-  const matchedAds = [];
-  data.some((ad) => {
-    if(checkMapFilters(ad)) {
-      matchedAds.push(ad);
-    }
-  });
-  return matchedAds;
-};
+const filterOffers = (data) => data.slice().filter(checkMapFilters);
 
 export {
   filterOffers,
