@@ -1047,7 +1047,7 @@ fieldset {
    margin-top: 3px;
  }
 
- .server-error {
+ .ad-form-server__error {
   position: fixed;
   top: 10px;
   right: 0;
@@ -1064,7 +1064,7 @@ fieldset {
   background-color: rgba(0, 0, 0, 0.8);
  }
 
- .message-error {
+ .ad-form__message-error {
   position: relative;
 
   color: #ffffff;

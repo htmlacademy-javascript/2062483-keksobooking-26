@@ -5,6 +5,8 @@ import {
 } from './validation-ad-form.js';
 import {makeRequest} from './api.js';
 import {resetMap} from './map.js';
+import {isPressEscape} from './util.js';
+import {mapFiltersContainer} from './map-filters.js';
 
 const submitButton = adForm.querySelector('.ad-form__submit');
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -22,8 +24,7 @@ const onMessageClick = (evt) => {
 };
 
 const onMessageEscKeydown = (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
+  if (isPressEscape(evt)) {
     closeMessage();
   }
 };
@@ -40,12 +41,8 @@ function closeMessage () {
   document.removeEventListener('click', onMessageClick);
 }
 
-const blockSubmitButton = () => {
-  submitButton.setAttribute('disabled', true);
-};
-
-const unblockSubmitButton = () => {
-  submitButton.removeAttribute('disabled');
+const isBlockSubmitButton = (state) => {
+  submitButton.disabled = state;
 };
 
 const resetAdForm = () => {
@@ -56,21 +53,22 @@ const resetAdForm = () => {
 };
 
 const onSendSucces = () => {
-  unblockSubmitButton();
+  isBlockSubmitButton(false);
   resetAdForm();
   resetMap();
+  mapFiltersContainer.reset();
   showMessage(createMessage(successTemplate));
 };
 
 const onSendFail = () => {
-  unblockSubmitButton();
+  isBlockSubmitButton(false);
   showMessage(createMessage(errorTemplate));
 };
 
 const submitAdForm = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
-    blockSubmitButton();
+    isBlockSubmitButton(true);
     makeRequest(
       onSendSucces,
       onSendFail,
@@ -88,5 +86,8 @@ const setSubmitAdForm = () => {
   adForm.addEventListener('submit', submitAdForm);
 };
 
-export {setResetAdForm, setSubmitAdForm};
+export {
+  setResetAdForm,
+  setSubmitAdForm
+};
 

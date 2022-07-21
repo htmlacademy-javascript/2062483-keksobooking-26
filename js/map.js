@@ -1,13 +1,24 @@
 import {CoordinatesOfTokyo} from './constants.js';
 import {getAdressInputValue} from './validation-ad-form.js';
-import {getCoordinatesString, showError} from './util.js';
 import {createOfferCard} from './offer-card.js';
 import {changeFormsState} from './toggle-status-page.js';
-import {COUNT_OF_AD} from './constants.js';
 import {makeRequest} from './api.js';
+import {
+  getCoordinatesString,
+  showError,
+  debounce,
+  cutOffersListToMaxCount
+} from './util.js';
+import {
+  COUNT_OF_AD,
+  RERENDER_DELAY
+} from './constants.js';
+import {
+  mapFiltersContainer,
+  filterOffers
+} from './map-filters.js';
 
 let offersData = [];
-
 
 const MapAndMarkersSettings = {
   LAYER : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -73,16 +84,26 @@ const coordinatesMainPinHandler = ({target}) => {
 
 marker.on('moveend', coordinatesMainPinHandler);
 
+const resetAdsMarkers = () => {
+  markerGroup.clearLayers();
+  markerGroup.closePopup();
+};
+
 const onSuccessGetData = (data) => {
   offersData = data.slice();
-  setOfferMarkersOnMap(offersData.slice(0, COUNT_OF_AD));
+  setOfferMarkersOnMap(cutOffersListToMaxCount(offersData, COUNT_OF_AD));
+
+  mapFiltersContainer.addEventListener('change', debounce(() => {
+    resetAdsMarkers();
+    setOfferMarkersOnMap(cutOffersListToMaxCount(filterOffers(data),COUNT_OF_AD));
+  }, RERENDER_DELAY));
 };
 
 const onFailGetData = () => {
   showError();
 };
 
-const getMap = () => {
+const getOffers = () => {
   makeRequest(
     (data) => onSuccessGetData(data),
     () => onFailGetData(),
@@ -92,7 +113,7 @@ const getMap = () => {
 
 const loadMap = () => {
   changeFormsState(true);
-  map.on('load', getMap)
+  map.on('load', getOffers)
     .setView({
       lat : CoordinatesOfTokyo.lat,
       lng : CoordinatesOfTokyo.lng
@@ -106,22 +127,18 @@ const resetMainPin = () => {
   });
 };
 
-const resetMarkerGroup = () => {
-  markerGroup.clearLayers();
-  markerGroup.closePopup();
-};
-
 const resetMap = () => {
   map.setView({
     lat: CoordinatesOfTokyo.lat,
     lng: CoordinatesOfTokyo.lng,
   }, CoordinatesOfTokyo.scale);
   resetMainPin();
-  resetMarkerGroup();
+  resetAdsMarkers();
   setOfferMarkersOnMap(offersData.slice(0, COUNT_OF_AD));
 };
 
 export {
   loadMap,
-  resetMap
+  resetMap,
+  setOfferMarkersOnMap,
 };

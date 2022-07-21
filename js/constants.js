@@ -49,6 +49,8 @@ const Urls = {
   POST: 'https://26.javascript.pages.academy/keksobooking',
 };
 
+const RERENDER_DELAY = 500;
+
 export {
   COUNT_OF_AD,
   TYPE_OF_OFFER,
@@ -61,5 +63,6 @@ export {
   GuestsCount,
   minPriceDependingHousingType,
   CoordinatesOfTokyo,
-  Urls
+  Urls,
+  RERENDER_DELAY
 };

@@ -47,10 +47,22 @@ const showError = () => {
   const messageContainer = document.createElement('div');
   const message = document.createElement('div');
   message.textContent = 'Сервер временно не доступен. Объявления на карте не загрузились. Попробуйте позже';
-  messageContainer.classList.add('server-error');
-  message.classList.add('message-error');
+  messageContainer.classList.add('ad-form-server__error');
+  message.classList.add('ad-form__message-error');
   document.body.append(messageContainer);
   messageContainer.append(message);
+};
+
+const isPressEscape = (evt) => evt.key === 'Escape';
+
+const cutOffersListToMaxCount = (offers, maxCount) => offers.slice(0, maxCount);
+
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
 };
 
 export {
@@ -60,5 +72,8 @@ export {
   getNewSetOfValues,
   declinationString,
   getCoordinatesString,
-  showError
+  showError,
+  isPressEscape,
+  debounce,
+  cutOffersListToMaxCount
 };
