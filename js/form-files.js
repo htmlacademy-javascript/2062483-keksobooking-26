@@ -1,6 +1,9 @@
 import {adForm} from './validation-ad-form.js';
-import {FILE_TYPES} from './constants.js';
 import {createPhoto} from './util.js';
+import {
+  FILE_TYPES,
+  avatarDefaultPreviewSrc
+} from './constants.js';
 
 
 const avatarInput = adForm.querySelector('#avatar');
@@ -37,7 +40,7 @@ avatarInput.addEventListener('change', onAvatarInputChange);
 photoInput.addEventListener('change', onPhotoInputChange);
 
 const resetImages = () => {
-  avatarPreview.src = 'img/muffin-grey.svg';
+  avatarPreview.src = avatarDefaultPreviewSrc;
   photoPreview.innerHTML = '';
 };
 

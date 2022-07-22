@@ -1,13 +1,18 @@
+
+import {makeRequest} from './api.js';
+import {isPressEscape} from './util.js';
+import {mapFiltersContainer} from './map-filters.js';
+import {resetImages} from './form-files.js';
 import {
   adForm,
   sliderElement,
   pristine
 } from './validation-ad-form.js';
-import {makeRequest} from './api.js';
-import {resetMap} from './map.js';
-import {isPressEscape} from './util.js';
-import {mapFiltersContainer} from './map-filters.js';
-import {resetImages} from './form-files.js';
+import {
+  resetMap,
+  getDefaultCoordinatesInAdressInput
+} from './map.js';
+
 
 const submitButton = adForm.querySelector('.ad-form__submit');
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -46,19 +51,24 @@ const isBlockSubmitButton = (state) => {
   submitButton.disabled = state;
 };
 
-const resetAdForm = () => {
+const resetFormInputsAndMap = () => {
   adForm.reset();
   sliderElement.noUiSlider.reset();
   resetMap();
   resetImages();
+  mapFiltersContainer.reset();
+  getDefaultCoordinatesInAdressInput();
   pristine.reset();
+};
+
+const onResetAdForm = (evt) => {
+  evt.preventDefault();
+  resetFormInputsAndMap();
 };
 
 const onSendSucces = () => {
   isBlockSubmitButton(false);
-  resetAdForm();
-  resetMap();
-  mapFiltersContainer.reset();
+  resetFormInputsAndMap();
   showMessage(createMessage(successTemplate));
 };
 
@@ -67,7 +77,7 @@ const onSendFail = () => {
   showMessage(createMessage(errorTemplate));
 };
 
-const submitAdForm = (evt) => {
+const onSubmitAdForm = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
     isBlockSubmitButton(true);
@@ -81,11 +91,11 @@ const submitAdForm = (evt) => {
 };
 
 const setResetAdForm = () => {
-  resetButton.addEventListener('click', resetAdForm);
+  resetButton.addEventListener('click', onResetAdForm);
 };
 
 const setSubmitAdForm = () => {
-  adForm.addEventListener('submit', submitAdForm);
+  adForm.addEventListener('submit', onSubmitAdForm);
 };
 
 export {

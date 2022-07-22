@@ -53,6 +53,20 @@ const RERENDER_DELAY = 500;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
+const avatarDefaultPreviewSrc = 'img/muffin-grey.svg';
+
+const ErrorMessagesInForm = {
+  PRISE_INPUT_MESSAGE : {
+    maxPriceError : 'Слишком дорого',
+    minPriceError : 'Слишком дешево'
+  },
+  GUESTS_INPUT_MESSAGE : {
+    notForGuests : 'Не для гостей',
+    notEnoughPlace : 'Не достаточно места для размещения'
+  },
+  TITLE_INPUT_MESSAGE : 'Длина заголовка должна быть от 30 до 100 символов'
+};
+
 export {
   COUNT_OF_AD,
   TYPE_OF_OFFER,
@@ -67,5 +81,7 @@ export {
   CoordinatesOfTokyo,
   Urls,
   RERENDER_DELAY,
-  FILE_TYPES
+  FILE_TYPES,
+  avatarDefaultPreviewSrc,
+  ErrorMessagesInForm
 };

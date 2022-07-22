@@ -78,11 +78,15 @@ const setOfferMarkersOnMap = (similarOffers) => {
   });
 };
 
-const coordinatesMainPinHandler = ({target}) => {
+const onCoordinatesMainPin = ({target}) => {
   getAdressInputValue(getCoordinatesString(target.getLatLng()));
 };
 
-marker.on('moveend', coordinatesMainPinHandler);
+const getDefaultCoordinatesInAdressInput = () => {
+  getAdressInputValue(getCoordinatesString(CoordinatesOfTokyo));
+};
+
+const setCoordinatesInAdressInput = () => marker.on('moveend', onCoordinatesMainPin);
 
 const resetAdsMarkers = () => {
   markerGroup.clearLayers();
@@ -113,6 +117,8 @@ const getOffers = () => {
 
 const loadMap = () => {
   changeFormsState(true);
+  getDefaultCoordinatesInAdressInput();
+  setCoordinatesInAdressInput();
   map.on('load', getOffers)
     .setView({
       lat : CoordinatesOfTokyo.lat,
@@ -141,4 +147,5 @@ export {
   loadMap,
   resetMap,
   setOfferMarkersOnMap,
+  getDefaultCoordinatesInAdressInput
 };

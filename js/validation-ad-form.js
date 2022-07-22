@@ -4,7 +4,8 @@ import {
   MAX_PRICE_VALUE,
   RoomsCount,
   GuestsCount,
-  minPriceDependingHousingType
+  minPriceDependingHousingType,
+  ErrorMessagesInForm
 } from './constants.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -84,17 +85,17 @@ const validateTitle = (value) => value.length >= MIN_TITLE_LENGTH && value.lengt
 
 const validatePrice = (value) => value >= minPriceDependingHousingType[housingTypeInput.value] && value <= MAX_PRICE_VALUE;
 
-const getPriceErrorMessage = () => priceInput.value >= MAX_PRICE_VALUE ? 'Слишком дорого' : 'Слишком дешево';
+const getPriceErrorMessage = () => priceInput.value >= MAX_PRICE_VALUE ? ErrorMessagesInForm.PRISE_INPUT_MESSAGE.maxPriceError : ErrorMessagesInForm.PRISE_INPUT_MESSAGE.minPriceError;
 
 const validateRooms = () => availableCountRoomsAndGuests[roomsInput.value].includes(guestsInput.value);
 
-const getGuestsErrorMessage = () => roomsInput.value === RoomsCount.HUNDRED_ROOMS ? 'Не для гостей' : 'Не достаточно места для размещения';
+const getGuestsErrorMessage = () => roomsInput.value === RoomsCount.HUNDRED_ROOMS ? ErrorMessagesInForm.GUESTS_INPUT_MESSAGE.notForGuests : ErrorMessagesInForm.GUESTS_INPUT_MESSAGE.notEnoughPlace;
 
 const initValidationAdForm = () => {
   pristine.addValidator(
     titleInput,
     validateTitle,
-    'Длина заголовка должна быть от 30 до 100 символов'
+    ErrorMessagesInForm.TITLE_INPUT_MESSAGE
   );
   pristine.addValidator(
     priceInput,
