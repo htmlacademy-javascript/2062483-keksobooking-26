@@ -11,7 +11,7 @@ import {
 } from './util.js';
 import {
   COUNT_OF_AD,
-  RERENDER_DELAY
+  DELAY
 } from './constants.js';
 import {
   mapFiltersContainer,
@@ -100,7 +100,7 @@ const onSuccessGetData = (data) => {
   mapFiltersContainer.addEventListener('change', debounce(() => {
     resetAdsMarkers();
     setOfferMarkersOnMap(cutOffersListToMaxCount(filterOffers(data), COUNT_OF_AD));
-  }, RERENDER_DELAY));
+  }, DELAY));
 };
 
 const onFailGetData = () => {

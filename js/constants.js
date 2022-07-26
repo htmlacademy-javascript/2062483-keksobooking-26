@@ -49,7 +49,7 @@ const Urls = {
   POST: 'https://26.javascript.pages.academy/keksobooking',
 };
 
-const RERENDER_DELAY = 500;
+const DELAY = 500;
 
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
@@ -80,7 +80,7 @@ export {
   minPriceDependingHousingType,
   CoordinatesOfTokyo,
   Urls,
-  RERENDER_DELAY,
+  DELAY,
   FILE_TYPES,
   avatarDefaultPreviewSrc,
   ErrorMessagesInForm
