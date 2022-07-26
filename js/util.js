@@ -1,12 +1,24 @@
+import {DELAY} from './constants.js';
+
+const RemaindersOfDivision= {
+  ONE : 1,
+  FIVE : 5
+};
+
+const RangeWhenUseThirdWord = {
+  FROM : 10,
+  TO : 20
+};
+
 const declinationString = (number, words) => {
   const value = number % 100;
-  if (value % 10 === 1) {
+  if (value % 10 === RemaindersOfDivision.ONE) {
     return words[0];
   }
-  if (value % 10 > 1 && value % 10 < 5 || words[2] === undefined) {
+  if (value % 10 > RemaindersOfDivision.ONE && value % 10 < RemaindersOfDivision.FIVE || words[2] === undefined) {
     return words[1];
   }
-  if (value > 10 && value < 20){
+  if (value > RangeWhenUseThirdWord.FROM && value < RangeWhenUseThirdWord.TO){
     return words[2];
   }
   return words[2];
@@ -30,7 +42,7 @@ const isPressEscape = (evt) => evt.key === 'Escape';
 
 const cutOffersListToMaxCount = (offers, maxCount) => offers.slice(0, maxCount);
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay = DELAY) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
